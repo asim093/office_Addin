@@ -106,43 +106,45 @@ const HomeScreen = () => {
   }, []);
 
   const handleLogin = () => {
-    console.log(`Retrieving User Email`);
-    if (!officeReady) return;
-    setLoading(true);
+    navigate("/exportExcel");
 
-    try {
-      Office.context.auth.getAccessTokenAsync(
-        {
-          allowConsentPrompt: true,
-          allowSignInPrompt: true,
-          forMSGraphAccess: true,
-        },
-        async (result) => {
-          console.log("Token callback result:", result);
+    // console.log(`Retrieving User Email`);
+    // if (!officeReady) return;
+    // setLoading(true);
 
-          if (result.status === "succeeded" && result.value) {
-            const decodedToken = jwtDecode(result.value);
-            console.log("Decoded token:", decodedToken);
-            console.log("Email:", decodedToken.preferred_username);
-            const emailCheck = await checkEmail(decodedToken.preferred_username);
-            console.log("Email Check:", emailCheck);
-            setLoading(false);
-            if (emailCheck) {
-              setShowError(false);
-              navigate("/exportExcel");
-            } else {
-              setShowError(true);
-            }
-          } else {
-            console.error("Failed to get token:", result);
-            setError(`Token retrieval failed: ${result.error.message}`);
-          }
-        }
-      );
-    } catch (authError) {
-      console.error("Auth error details:", JSON.stringify(authError, null, 2));
-      setError(`Authentication failed: ${authError.message}`);
-    }
+    // try {
+    //   Office.context.auth.getAccessTokenAsync(
+    //     {
+    //       allowConsentPrompt: true,
+    //       allowSignInPrompt: true,
+    //       forMSGraphAccess: true,
+    //     },
+    //     async (result) => {
+    //       console.log("Token callback result:", result);
+
+    //       if (result.status === "succeeded" && result.value) {
+    //         const decodedToken = jwtDecode(result.value);
+    //         console.log("Decoded token:", decodedToken);
+    //         console.log("Email:", decodedToken.preferred_username);
+    //         const emailCheck = await checkEmail(decodedToken.preferred_username);
+    //         console.log("Email Check:", emailCheck);
+    //         setLoading(false);
+    //         if (emailCheck) {
+    //           setShowError(false);
+    //           navigate("/exportExcel");
+    //         } else {
+    //           setShowError(true);
+    //         }
+    //       } else {
+    //         console.error("Failed to get token:", result);
+    //         setError(`Token retrieval failed: ${result.error.message}`);
+    //       }
+    //     }
+    //   );
+    // } catch (authError) {
+    //   console.error("Auth error details:", JSON.stringify(authError, null, 2));
+    //   setError(`Authentication failed: ${authError.message}`);
+    // }
   };
 
   return (
