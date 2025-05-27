@@ -10,21 +10,20 @@
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="Excel-to-Word"/>
   <Description DefaultValue="A template to get started."/>
-  <IconUrl DefaultValue="https://localhost:3000/assets/icon-32.png"/>
-  <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/icon-64.png"/>
+  <IconUrl DefaultValue="https://officeaddins.netlify.app/assets/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://officeaddins.netlify.app/assets/icon-64.png"/>
   <SupportUrl DefaultValue="https://www.contoso.com/help"/>
   <AppDomains>
     <AppDomain>https://www.contoso.com</AppDomain>
-    <!-- Optionally, add localhost if needed -->
-    <AppDomain>https://localhost:3000</AppDomain>
+    <AppDomain>https://officeaddins.netlify.app</AppDomain>
   </AppDomains>
   <Hosts>
     <Host Name="Workbook"/>
   </Hosts>
   <DefaultSettings>
-    <SourceLocation DefaultValue="https://localhost:3000/taskpane.html"/>
+    <SourceLocation DefaultValue="https://officeaddins.netlify.app/Excel/dist/taskpane.html"/>
   </DefaultSettings>
-<Permissions>ReadWriteDocument</Permissions>
+  <Permissions>ReadWriteDocument</Permissions>
   <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
     <Hosts>
       <Host xsi:type="Workbook">
@@ -66,7 +65,7 @@
         </DesktopFormFactor>
         <Requirements>
           <bt:Sets DefaultMinVersion="1.3">
-              <bt:Set Name="IdentityAPI" MinVersion="1.3"/>
+            <bt:Set Name="IdentityAPI" MinVersion="1.3"/>
           </bt:Sets>
         </Requirements>
       </Host>
@@ -74,14 +73,14 @@
     
     <Resources>
       <bt:Images>
-        <bt:Image id="Icon.16x16" DefaultValue="https://localhost:3000/assets/icon-16.png"/>
-        <bt:Image id="Icon.32x32" DefaultValue="https://localhost:3000/assets/icon-32.png"/>
-        <bt:Image id="Icon.80x80" DefaultValue="https://localhost:3000/assets/icon-80.png"/>
+        <bt:Image id="Icon.16x16" DefaultValue="https://officeaddins.netlify.app/assets/icon-16.png"/>
+        <bt:Image id="Icon.32x32" DefaultValue="https://officeaddins.netlify.app/assets/icon-32.png"/>
+        <bt:Image id="Icon.80x80" DefaultValue="https://officeaddins.netlify.app/assets/icon-80.png"/>
       </bt:Images>
       <bt:Urls>
         <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812"/>
-        <bt:Url id="Commands.Url" DefaultValue="https://localhost:3000/commands.html"/>
-        <bt:Url id="Taskpane.Url" DefaultValue="https://localhost:3000/taskpane.html"/>
+        <bt:Url id="Commands.Url" DefaultValue="https://officeaddins.netlify.app/Excel/dist/commands.html"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://officeaddins.netlify.app/Excel/dist/taskpane.html"/>
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="GetStarted.Title" DefaultValue="Get started with your sample add-in!"/>
@@ -95,7 +94,7 @@
     </Resources>
     <WebApplicationInfo>
       <Id>ab1349c6-78b8-4824-800b-066ea1c49997</Id>
-      <Resource>api://localhost:3000/ab1349c6-78b8-4824-800b-066ea1c49997</Resource>
+      <Resource>api://officeaddins.netlify.app/ab1349c6-78b8-4824-800b-066ea1c49997</Resource>
       <Scopes>
         <Scope>User.Read</Scope>
         <Scope>profile</Scope>
