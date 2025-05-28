@@ -1,24 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { PublicClientApplication } from "@azure/msal-browser";
+import { PublicClientApplication, Configuration } from "@azure/msal-browser";
 import { jwtDecode } from "jwt-decode";
 import "./HomeScreen.scss";
 import logo from "../assets/images/logoword.png";
 import logError from "../assets/images/LogError.png";
 import dismiss from "../assets/images/Dismiss.png";
-import microsoftTri from "../assets/images/MicrosoftTri.png";
-import needHelp from "../assets/images/needHelp.png";
 import { useNavigate } from "react-router-dom";
 
 const CLIENT_ID = "ab1349c6-78b8-4824-800b-066ea1c49997";
 const AUTHORITY = "https://login.microsoftonline.com/common";
 
-const msalInstance = new PublicClientApplication({
+const msalConfig = {
   auth: {
     clientId: CLIENT_ID,
     authority: AUTHORITY,
     redirectUri: window.location.origin,
   },
-});
+};
+
+const msalInstance = new PublicClientApplication(msalConfig);
 
 const checkEmail = async (email) => {
   try {
@@ -57,7 +57,7 @@ const HomeScreen = () => {
       if (!officeReady) return;
 
       try {
-        // 🛠 Must call initialize() before any MSAL method
+        // ✅ Always await MSAL initialize before calling loginPopup
         await msalInstance.initialize();
 
         const response = await msalInstance.loginPopup({
@@ -68,6 +68,7 @@ const HomeScreen = () => {
         console.log("Decoded Token:", decodedToken);
       } catch (err) {
         console.error("Login failed:", err);
+        setError(err.message);
       }
     };
 
@@ -75,7 +76,6 @@ const HomeScreen = () => {
   }, [officeReady]);
 
   const handleLogin = () => {
-    console.log("Retrieving User Email...");
     if (!officeReady) return;
 
     setLoading(true);
@@ -144,28 +144,16 @@ const HomeScreen = () => {
                   </p>
                 </div>
                 <button className="dismiss-button" onClick={() => setShowError(false)}>
-                  <img src={dismiss} alt="dismiss icon" className="dismiss-icon" />
+                  <img src={dismiss} alt="dismiss icon" />
                 </button>
               </div>
             </div>
           )}
-
-          <div className="main-content">
+          <div className="content">
             <img src={logo} alt="logo" className="logo" />
-            <h1 className="welcome-text">Welcome!</h1>
-            <p className="sub-text">Export from Excel to Word with ease.</p>
             <button className="login-button" onClick={handleLogin}>
-              <img src={microsoftTri} alt="Microsoft icon" className="microsoft-icon" />
-              <span>Sign In With Microsoft</span>
+              Sign In With Microsoft
             </button>
-          </div>
-
-          <div className="help-container">
-            <img src={needHelp} alt="help icon" className="help-icon" />
-            <div>
-              <p className="help-title">Need Help?</p>
-              <p className="help-text">Contact Administrator</p>
-            </div>
           </div>
         </>
       )}
