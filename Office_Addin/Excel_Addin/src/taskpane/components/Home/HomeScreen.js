@@ -1,24 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { PublicClientApplication, Configuration } from "@azure/msal-browser";
-import { jwtDecode } from "jwt-decode";
+import jwtDecode from "jwt-decode"; // note: import default, not named
 import "./HomeScreen.scss";
 import logo from "../assets/images/logoword.png";
 import logError from "../assets/images/LogError.png";
 import dismiss from "../assets/images/Dismiss.png";
 import { useNavigate } from "react-router-dom";
-
-const CLIENT_ID = "ab1349c6-78b8-4824-800b-066ea1c49997";
-const AUTHORITY = "https://login.microsoftonline.com/common";
-
-const msalConfig = {
-  auth: {
-    clientId: CLIENT_ID,
-    authority: AUTHORITY,
-    redirectUri: "https://localhost:3000/taskpane.html",
-  },
-};
-
-const msalInstance = new PublicClientApplication(msalConfig);
 
 const checkEmail = async (email) => {
   try {
@@ -52,30 +38,13 @@ const HomeScreen = () => {
     });
   }, []);
 
-  useEffect(() => {
-    const runLogin = async () => {
-      if (!officeReady) return;
-
-      try {
-        await msalInstance.initialize();
-
-        const response = await msalInstance.loginRedirect({
-          scopes: ["openid", "profile", "email"],
-        });
-
-        const decodedToken = jwtDecode(response.idToken);
-        console.log("Decoded Token:", decodedToken);
-      } catch (err) {
-        console.error("Login failed:", err);
-        setError(err.message);
-      }
-    };
-
-    runLogin();
-  }, [officeReady]);
+ 
 
   const handleLogin = () => {
-    if (!officeReady) return;
+    if (!officeReady) {
+      setError("Office is not ready yet.");
+      return;
+    }
 
     setLoading(true);
 
@@ -86,28 +55,38 @@ const HomeScreen = () => {
         forMSGraphAccess: true,
       },
       async (result) => {
-        console.log("Token callback result:", result);
-
         if (result.status === "succeeded" && result.value) {
-          const decodedToken = jwtDecode(result.value);
-          const email = decodedToken.preferred_username;
+          try {
+            const decodedToken = jwtDecode(result.value);
+            const email = decodedToken.preferred_username || decodedToken.upn || decodedToken.email;
 
-          console.log("Email:", email);
+            console.log("Decoded Email:", email);
 
-          const emailCheck = await checkEmail(email);
-          console.log("Email Check:", emailCheck);
+            if (!email) {
+              setLoading(false);
+              setError("Could not extract email from token.");
+              return;
+            }
 
-          setLoading(false);
-          if (emailCheck) {
-            setShowError(false);
-            navigate("/exportExcel");
-          } else {
-            setShowError(true);
+            const emailCheck = await checkEmail(email);
+
+            setLoading(false);
+
+            if (emailCheck) {
+              setShowError(false);
+              navigate("/exportExcel");
+            } else {
+              setShowError(true);
+            }
+          } catch (decodeError) {
+            setLoading(false);
+            setError("Failed to decode token.");
           }
         } else {
           setLoading(false);
-          console.error("Token retrieval failed:", result.error);
-          setError(`Token retrieval failed: ${result.error.message}`);
+          const errorMsg = result.error?.message || "Unknown error during token retrieval.";
+          console.error("Token retrieval failed:", errorMsg);
+          setError(`Token retrieval failed: ${errorMsg}`);
         }
       }
     );
