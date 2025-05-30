@@ -57,10 +57,9 @@ const HomeScreen = () => {
       if (!officeReady) return;
 
       try {
-        // ✅ Always await MSAL initialize before calling loginPopup
         await msalInstance.initialize();
 
-        const response = await msalInstance.loginPopup({
+        const response = await msalInstance.loginRedirect({
           scopes: ["openid", "profile", "email"],
         });
 
