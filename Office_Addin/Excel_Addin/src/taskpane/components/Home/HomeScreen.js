@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import jwtDecode from "jwt-decode"; // note: import default, not named
+import { jwtDecode } from "jwt-decode";
 import "./HomeScreen.scss";
 import logo from "../assets/images/logoword.png";
 import logError from "../assets/images/LogError.png";
@@ -38,13 +38,8 @@ const HomeScreen = () => {
     });
   }, []);
 
- 
-
   const handleLogin = () => {
-    if (!officeReady) {
-      setError("Office is not ready yet.");
-      return;
-    }
+    if (!officeReady) return;
 
     setLoading(true);
 
@@ -55,38 +50,28 @@ const HomeScreen = () => {
         forMSGraphAccess: true,
       },
       async (result) => {
+        console.log("Token callback result:", result);
+
         if (result.status === "succeeded" && result.value) {
-          try {
-            const decodedToken = jwtDecode(result.value);
-            const email = decodedToken.preferred_username || decodedToken.upn || decodedToken.email;
+          const decodedToken = jwtDecode(result.value);
+          const email = decodedToken.preferred_username;
 
-            console.log("Decoded Email:", email);
+          console.log("Email:", email);
 
-            if (!email) {
-              setLoading(false);
-              setError("Could not extract email from token.");
-              return;
-            }
+          const emailCheck = await checkEmail(email);
+          console.log("Email Check:", emailCheck);
 
-            const emailCheck = await checkEmail(email);
-
-            setLoading(false);
-
-            if (emailCheck) {
-              setShowError(false);
-              navigate("/exportExcel");
-            } else {
-              setShowError(true);
-            }
-          } catch (decodeError) {
-            setLoading(false);
-            setError("Failed to decode token.");
+          setLoading(false);
+          if (emailCheck) {
+            setShowError(false);
+            navigate("/exportExcel");
+          } else {
+            setShowError(true);
           }
         } else {
           setLoading(false);
-          const errorMsg = result.error?.message || "Unknown error during token retrieval.";
-          console.error("Token retrieval failed:", errorMsg);
-          setError(`Token retrieval failed: ${errorMsg}`);
+          console.error("Token retrieval failed:", result.error);
+          setError(`Token retrieval failed: ${result.error?.message || 'Unknown error'}`);
         }
       }
     );
