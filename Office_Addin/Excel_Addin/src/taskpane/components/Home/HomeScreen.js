@@ -52,27 +52,27 @@ const HomeScreen = () => {
     });
   }, []);
 
-  useEffect(() => {
-    const runLogin = async () => {
-      if (!officeReady) return;
+  // useEffect(() => {
+  //   const runLogin = async () => {
+  //     if (!officeReady) return;
 
-      try {
-        await msalInstance.initialize();
+  //     try {
+  //       await msalInstance.initialize();
 
-        const response = await msalInstance.loginRedirect({
-          scopes: ["openid", "profile", "email"],
-        });
+  //       const response = await msalInstance.loginRedirect({
+  //         scopes: ["openid", "profile", "email"],
+  //       });
 
-        const decodedToken = jwtDecode(response.idToken);
-        console.log("Decoded Token:", decodedToken);
-      } catch (err) {
-        console.error("Login failed:", err);
-        setError(err.message);
-      }
-    };
+  //       const decodedToken = jwtDecode(response.idToken);
+  //       console.log("Decoded Token:", decodedToken);
+  //     } catch (err) {
+  //       console.error("Login failed:", err);
+  //       setError(err.message);
+  //     }
+  //   };
 
-    runLogin();
-  }, [officeReady]);
+  //   runLogin();
+  // }, [officeReady]);
 
   const handleLogin = () => {
     if (!officeReady) return;
