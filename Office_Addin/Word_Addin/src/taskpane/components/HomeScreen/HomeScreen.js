@@ -14,7 +14,7 @@ const msalConfig = {
   auth: {
     clientId: CLIENT_ID,
     authority: AUTHORITY,
-    redirectUri: window.location.origin,
+    redirectUri: "https://localhost:3000/taskpane.html",
   },
 };
 
