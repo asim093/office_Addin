@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { PublicClientApplication, Configuration } from "@azure/msal-browser";
 import { jwtDecode } from "jwt-decode";
 import "./HomeScreen.scss";
-import logo from "../assets/images/logoword.png";
-import logError from "../assets/images/LogError.png";
-import dismiss from "../assets/images/Dismiss.png";
+import logo from "../../../../assets/logoword.png";
+import logError from "../../../../assets/LogError.png";
+import dismiss from "../../../../assets/Dismiss.png";
 import { useNavigate } from "react-router-dom";
 
 const CLIENT_ID = "ab1349c6-78b8-4824-800b-066ea1c49997";
