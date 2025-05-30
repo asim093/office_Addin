@@ -14,7 +14,7 @@ const msalConfig = {
   auth: {
     clientId: CLIENT_ID,
     authority: AUTHORITY,
-    redirectUri: "https://officeaddins.netlify.app/Excel/dist/taskpane.html",
+    redirectUri: "https://officeaddins.netlify.app/Word/dist/taskpane.html",
   },
 };
 
